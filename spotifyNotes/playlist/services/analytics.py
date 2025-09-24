@@ -13,10 +13,10 @@ def analyze_notes_sentiment(notes):
         analysis = TextBlob(notes_text)
         polarity = analysis.sentiment.polarity
     
-    if polarity>0.1:
+    if polarity> 0.1:
         sentiment = "postive"
         sentiment_counts["postive"] += 1
-    elif polarity<-0.1:
+    elif polarity< -0.1:
         sentiment = "negative"
         sentiment_counts["negative"] += 1
     else:
