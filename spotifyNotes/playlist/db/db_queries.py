@@ -35,7 +35,7 @@ def select_notes(trackId: str):
 
 
 def update_notes(userId: str, trackId: str):
-    return run_query("update_notes", prams=(userId, trackId, ),)
+    return run_query("update_notes", prams=(userId, trackId,))
 
 def delete_notes(userId: str, trackId: str):
     return run_query("", prams=(userId, trackId,))
