@@ -8,14 +8,14 @@ from .services.spotify import SpotifyService
 def track_notes_analysis(request, trackId):
     userId = request.session.get("spotify_user_id")
     if not userId:
-        return redirect("spotify_login")
+        return redirect("playlist:spotify_login")
     #fetch data from db
     notes = select_notes(trackId)
     
     sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
     chart_html = plot_sentiment_distribution(sentiment_counts)
     
-    return render(request, "dashboard/track_notes_analysis.html",{
+    return render(request, "playlist:dashboard/track_notes_analysis.html",{
         "chart_html": chart_html,
         "analyzed_notes": analyzed_notes,
         "track_id": trackId
@@ -28,14 +28,14 @@ def spotify_login(request):
 def spotify_callback(request):
     code=request.GET.get("code")
     if not code:
-        return redirect("spoify_login")
+        return redirect("playlist:spoify_login")
     
     service=SpotifyService(request.session)
     service.exchange_code_for_token(code)
     
     profile=service.get_user_profile()
     request.session["spotify_user_id"] = profile.get("id")
-    return redirect("dashboard")
+    return redirect("playlist:dashboard")
 
 def dashboard(request):
     service=SpotifyService(request.session)
@@ -46,7 +46,7 @@ def dashboard(request):
 def notes_view(request, track_id):
     user_id = request.session.get("spotify_user_id")
     if not user_id:
-        return redirect("spotify_login")  # redirect if user not logged in
+        return redirect("playlist:spotify_login")  # redirect if user not logged in
 
     # Fetch notes for this user and track
     notes = select_notes(track_id)
@@ -62,7 +62,7 @@ def notes_view(request, track_id):
 def add_or_update_note(request):
     user_id = request.session.get("spotify_user_id")
     if not user_id:
-        return redirect("spotify_login")
+        return redirect("playlist:spotify_login")
 
     track_id = request.POST.get("track_id")
     note_text = request.POST.get("note_text")
@@ -75,9 +75,9 @@ def add_or_update_note(request):
 
 @require_http_methods(["POST"])
 def remove_note(request):
-    user_id = request.session.get("spotify_user_id")
+    user_id = request.session.get("playlist:spotify_user_id")
     if not user_id:
-        return redirect("spotify_login")
+        return redirect("playlist:spotify_login")
 
     track_id = request.POST.get("track_id")
     if track_id:
