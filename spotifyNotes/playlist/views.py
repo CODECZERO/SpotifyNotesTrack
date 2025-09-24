@@ -38,6 +38,7 @@ def spotify_callback(request):
 
     profile = service.get_user_profile()
     request.session["spotify_user_id"] = profile.get("id")
+    request.session["spotify_username"] = profile.get("display_name")
     return redirect("playlist:dashboard")
 
 
