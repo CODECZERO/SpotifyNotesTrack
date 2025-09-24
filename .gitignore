@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+*.swp
+*.swo
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Django
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.mo
+*.db
+db.sqlite3
+
+# Media / static files
+media/
+staticfiles/
+static/__pycache__/
+*.css.map
+*.js.map
+
+# Environment / secrets
+.env
+.env.*
+*.secret
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Node modules (if any frontend build)
+node_modules/
+
+# MacOS
+.DS_Store
+
+# Coverage / test reports
+.coverage
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Pytest
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Plotly / temp charts (if any)
+*.html
+
+# Ignore compiled frontend files (if using React/Vue)
+build/
+dist/

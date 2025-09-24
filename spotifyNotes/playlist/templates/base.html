@@ -2,21 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Spotify Dashboard{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>{% block title %}Spotify Notes{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block head %}{% endblock %}
 </head>
 <body>
     <header>
+        <h1>Spotify Notes Dashboard</h1>
         <nav>
             <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'notes' %}">Notes</a>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'spotify_logout' %}">Logout</a>
         </nav>
     </header>
 
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    <footer>
+        <p>&copy; 2025 Spotify Notes</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
