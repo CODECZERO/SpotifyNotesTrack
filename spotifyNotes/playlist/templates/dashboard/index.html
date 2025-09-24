@@ -9,8 +9,8 @@
         {% for track in tracks %}
             <div class="track-item">
                 <p><strong>{{ track.name }}</strong> by {{ track.artists.0.name }}</p>
-                <a href="{% url 'track_notes' track.id %}">View Notes</a> |
-                <a href="{% url 'track_notes_analysis' track.id %}">Analyze Sentiment</a>
+                <a href="{% url 'playlist:track_notes' track.id %}">View Notes</a> |
+                <a href="{% url 'playlist:track_notes_analysis' track.id %}">Analyze Sentiment</a>
             </div>
         {% endfor %}
     </div>
