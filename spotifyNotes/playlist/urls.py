@@ -9,4 +9,6 @@ urlpatterns = [
     path('track/<str:track_id>/notes/', views.notes_view, name='track_notes'),
     path('track/<str:track_id>/analysis/',
          views.track_notes_analysis, name='track_notes_analysis'),
+    path('track/<str:track_id>/note/',
+         views.add_or_update_note, name='add_or_update_note'),
 ]
