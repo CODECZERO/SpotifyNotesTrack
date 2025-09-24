@@ -12,7 +12,7 @@
 </form>
 
 
-<form method="post" action="{% url 'playlist:remove_note' %}">
+<form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}">
     {% csrf_token %}
     <input type="hidden" name="track_id" value="{{ track_id }}">
     <button type="submit">Delete Note</button>
