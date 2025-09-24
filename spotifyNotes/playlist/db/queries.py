@@ -13,7 +13,7 @@ QUERIES = {
     """,
     
     "select_notes_by_music": """
-        SELECT notesText FROM playlistNotesTrack 
+        SELECT notesText,userId,trackId FROM playlistNotesTrack 
         where trackId=%s;
     """,
     
