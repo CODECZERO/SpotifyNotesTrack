@@ -55,7 +55,7 @@ def notes_view(request, track_id):
         return redirect("playlist:spotify_login")
 
     # Fetch notes for this user and track
-    notes = select_notes(track_id)
+    notes = select_notes(trackId=track_id)
     # notes = list of tuples: [(Id, userId, trackId, notesText, created_at, updated_at), ...]
 
     return render(request, "dashboard/notes.html", {
@@ -75,7 +75,7 @@ def add_or_update_note(request):
 
     if track_id and note_text is not None:
         # upsert handles insert or update
-        upsert_notes(user_id, track_id, note_text)
+        upsert_notes(userId=user_id, trackId=track_id, notesText=note_text)
 
     return redirect("playlist:track_notes", track_id=track_id)
 
@@ -88,6 +88,6 @@ def remove_note(request):
 
     track_id = request.POST.get("track_id")
     if track_id:
-        delete_notes(user_id, track_id)
+        delete_notes(userId=user_id, trackId=track_id)
 
     return redirect("playlist:track_notes", track_id=track_id)
