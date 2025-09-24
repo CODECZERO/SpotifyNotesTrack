@@ -22,10 +22,15 @@ def track_notes_analysis(request, track_id):
             "analyzed_notes": analyzed_notes,
             "track_id": track_id
         })
-    
+
     except Exception:
-        chart_html = "<p>Unable to generate chart</p>"
-        analyzed_notes = []
+        return render(request, "dashboard/track_notes_analysis.html", {
+            "message": f"An error occurred: {str(e)}",
+            "track_id": track_id,
+            "chart_html": None,
+            "analyzed_notes": []
+        })
+
 
 def spotify_login(request):
     loginUrl = SpotifyService.get_login_url()
