@@ -65,12 +65,11 @@ def notes_view(request, track_id):
 
 
 @require_http_methods(["POST"])
-def add_or_update_note(request):
+def add_or_update_note(request, track_id):
     user_id = request.session.get("spotify_user_id")
     if not user_id:
         return redirect("playlist:spotify_login")
 
-    track_id = request.POST.get("track_id")
     note_text = request.POST.get("note_text")
 
     if track_id and note_text is not None:

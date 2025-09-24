@@ -656,6 +656,15 @@
     .hidden {
         display: none !important;
     }
+
+    .album-cover {
+        text-align: center; /* centers inline/block content horizontally */
+    }
+
+    .album-cover img {
+        display: inline-block; /* make sure image respects text-align */
+    }
+
 </style>
 {% endblock %}
 
@@ -728,9 +737,9 @@
                      data-artist-name="{{ track.artists.0.name|lower }}"
                      data-track-id="{{ track.id }}">
                      <div class="album-cover">
-                        <img src="{{ track.album.images.0.url }}" width="200px" height="200px" alt="{{ track.name }} album cover">
+                        <img src="{{ track.album.images.0.url }}" width="400px" height="300px" alt="{{ track.name }} album cover">
                     </div>
-                    <div class="track-info">
+                    <div class="track-info" style="justify-content:center">
                         <h3 class="track-name">{{ track.name }}</h3>
                         <p class="track-artist">by {{ track.artists.0.name }}</p>
                     </div>
