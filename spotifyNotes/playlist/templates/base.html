@@ -308,8 +308,8 @@
             <h1>Spotify Notes Dashboard</h1>
             <div class="nav-container">
                 <a href="{% url 'playlist:dashboard' %}">Dashboard</a>
-                {% if request.session.spotify_user_id %}
-                    <span>Welcome, {{ request.session.spotify_user_id }}</span>
+                {% if request.session.spotify_name %}
+                    <span>Welcome, {{ request.session.spotify_name }}</span>
                 {% else %}
                     <a href="{% url 'playlist:spotify_login' %}">
                         <img
