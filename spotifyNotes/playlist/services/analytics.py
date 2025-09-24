@@ -34,7 +34,7 @@ def analyze_notes_sentiment(notes):
 
 def plot_sentiment_distribution(sentiment_counts):
     df = pd.DataFrame(list(sentiment_counts.items(), 
-                         colums = ["Sentiment", "Count"]))
+                         columns=["Sentiment", "Count"]))
     
     fig=px.pie(df, names="Sentiment", values="Count", title="Notes Sentiment Distribution",
                color="Sentiment", color_discrete_map={"positive": "green", 
