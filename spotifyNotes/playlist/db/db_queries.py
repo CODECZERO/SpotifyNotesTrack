@@ -40,3 +40,12 @@ def update_notes(userId: str, trackId: str):
 def delete_notes(userId: str, trackId: str):
     return run_query("", prams=(userId, trackId,))
 
+def upsert_notes(userId: str, trackId: str, notesText: str):
+    existing= run_query("select_notes_by_music", prams=(trackId,), fetchall=True)
+    
+    userNotes=next((n for n in existing if n[1]==userId),None)
+    
+    if userNotes:
+        update_notes(userId, trackId)
+    else:
+        insert_notes(userId, trackId, notesText)

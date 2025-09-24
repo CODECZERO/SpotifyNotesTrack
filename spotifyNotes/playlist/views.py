@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .db.db_queries import select_notes
+from django.views.decorators.http import require_http_methods
+from .db.db_queries import select_notes,delete_notes,upsert_notes
 from .services.analytics import analyze_notes_sentiment,plot_sentiment_distribution
 from .services.spotify import SpotifyService
 # Create your views here.
@@ -14,7 +15,7 @@ def track_notes_analysis(request, trackId):
     sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
     chart_html = plot_sentiment_distribution(sentiment_counts)
     
-    return render(request, "playlist/track_notes_analysis.html",{
+    return render(request, "dashboard/track_notes_analysis.html",{
         "chart_html": chart_html,
         "analyzed_notes": analyzed_notes,
         "track_id": trackId
@@ -40,4 +41,46 @@ def dashboard(request):
     service=SpotifyService(request.session)
     tracks=service.get_top_tracks()
     playlists=service.get_user_playlists()
-    return render(request,"playlists/dashboard.html",{"tracks": tracks,"playlist": playlists })
+    return render(request,"dashboard/index.html",{"tracks": tracks,"playlist": playlists })
+
+def notes_view(request, track_id):
+    user_id = request.session.get("spotify_user_id")
+    if not user_id:
+        return redirect("spotify_login")  # redirect if user not logged in
+
+    # Fetch notes for this user and track
+    notes = select_notes(track_id)
+    # notes = list of tuples: [(Id, userId, trackId, notesText, created_at, updated_at), ...]
+
+    return render(request, "dashboard/notes.html", {
+        "notes": notes,
+        "track_id": track_id
+    })
+
+
+@require_http_methods(["POST"])
+def add_or_update_note(request):
+    user_id = request.session.get("spotify_user_id")
+    if not user_id:
+        return redirect("spotify_login")
+
+    track_id = request.POST.get("track_id")
+    note_text = request.POST.get("note_text")
+
+    if track_id and note_text is not None:
+        upsert_notes(user_id, track_id, note_text)  # upsert handles insert or update
+
+    return redirect("track_notes", track_id=track_id)
+
+
+@require_http_methods(["POST"])
+def remove_note(request):
+    user_id = request.session.get("spotify_user_id")
+    if not user_id:
+        return redirect("spotify_login")
+
+    track_id = request.POST.get("track_id")
+    if track_id:
+        delete_notes(user_id, track_id)
+
+    return redirect("track_notes", track_id=track_id)

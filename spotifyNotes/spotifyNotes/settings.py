@@ -15,8 +15,8 @@ import dj_database_url
 import os
 from dotenv import load_dotenv
 load_dotenv()\
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR=Path(__file__).resolve().parent.parent
+    # Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'playlist',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "playlist", "static")]  # where your CSS/JS/images live
+# where your CSS/JS/images live
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "playlist", "static")]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
