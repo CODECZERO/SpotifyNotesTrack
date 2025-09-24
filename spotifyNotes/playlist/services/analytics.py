@@ -9,6 +9,7 @@ def analyze_notes_sentiment(notes):
     analyze_notes = []
     
     for n in notes:
+        print(n)
         notes_text = n[0] if len(n) > 0 else ""
         analysis = TextBlob(notes_text)
         polarity = analysis.sentiment.polarity
@@ -33,11 +34,19 @@ def analyze_notes_sentiment(notes):
 
 
 def plot_sentiment_distribution(sentiment_counts):
-    df = pd.DataFrame(list(sentiment_counts.items(), 
-                         columns=["Sentiment", "Count"]))
+    df = pd.DataFrame(list(sentiment_counts.items()), 
+                      columns=["Sentiment", "Count"])
     
-    fig=px.pie(df, names="Sentiment", values="Count", title="Notes Sentiment Distribution",
-               color="Sentiment", color_discrete_map={"positive": "green", 
-                                                      "neutral": "gray", 
-                                                      "negative": "red"})
+    print(df)
+    
+    fig = px.pie(
+        df, 
+        names="Sentiment", 
+        values="Count", 
+        title="Notes Sentiment Distribution",
+        color="Sentiment", 
+        color_discrete_map={"positive": "green", 
+                            "neutral": "gray", 
+                            "negative": "red"}
+    )
     return fig.to_html(full_html=False)
