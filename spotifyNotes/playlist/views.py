@@ -7,21 +7,25 @@ from .services.spotify import SpotifyService
 
 
 def track_notes_analysis(request, track_id):
-    userId = request.session.get("spotify_user_id")
-    if not userId:
-        return redirect("playlist:spotify_login")
-    # fetch data from db
-    notes = select_notes(trackId=track_id)
+    try:
+        userId = request.session.get("spotify_user_id")
+        if not userId:
+            return redirect("playlist:spotify_login")
+        # fetch data from db
+        notes = select_notes(trackId=track_id)
 
-    sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
-    chart_html = plot_sentiment_distribution(sentiment_counts)
+        sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
+        chart_html = plot_sentiment_distribution(sentiment_counts)
 
-    return render(request, "dashboard/track_notes_analysis.html", {
-        "chart_html": chart_html,
-        "analyzed_notes": analyzed_notes,
-        "track_id": track_id
-    })
-
+        return render(request, "dashboard/track_notes_analysis.html", {
+            "chart_html": chart_html,
+            "analyzed_notes": analyzed_notes,
+            "track_id": track_id
+        })
+    
+    except Exception:
+        chart_html = "<p>Unable to generate chart</p>"
+        analyzed_notes = []
 
 def spotify_login(request):
     loginUrl = SpotifyService.get_login_url()
