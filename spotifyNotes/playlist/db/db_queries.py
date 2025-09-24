@@ -4,7 +4,7 @@ from .queries import QUERIES
 
 def run_query(query_name: str, prams=None, commit=False, fetchone=False, 
               fetchall=False, batch=False):
-    sql= QUERIES.get(query_name)
+    sql = QUERIES.get(query_name)
     if not sql:
         raise ValueError(f"query not found {query_name}")
     

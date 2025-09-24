@@ -1,70 +1,67 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.pyc
-*.pyd
-*.swp
-*.swo
-
-# Virtual environment
-venv/
-ENV/
-env/
-.venv/
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 # Django
-*.sqlite3
 *.log
-*.pot
-*.pyc
-*.mo
-*.db
+local_settings.py
 db.sqlite3
-
-# Media / static files
+db.sqlite3-journal
 media/
-staticfiles/
-static/__pycache__/
-*.css.map
-*.js.map
 
-# Environment / secrets
+# Environment variables
 .env
-.env.*
-*.secret
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# IDE / Editor
+# IDE
 .vscode/
 .idea/
-*.iml
-*.sublime-project
-*.sublime-workspace
+*.swp
+*.swo
+*~
 
-# Node modules (if any frontend build)
-node_modules/
-
-# MacOS
+# OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Coverage / test reports
-.coverage
-htmlcov/
-nosetests.xml
-coverage.xml
-*.cover
-*.log
+# Render
+.render-buildpacks.json
 
-# Pytest
-.pytest_cache/
+# Static files (only ignore collected static files, not source static files)
+/staticfiles/
+/static_collected/
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# Plotly / temp charts (if any)
-*.html
-
-# Ignore compiled frontend files (if using React/Vue)
-build/
-dist/
+# DO NOT IGNORE THESE:
+# templates/ 
+# *.html
+# static/
+# */templates/
