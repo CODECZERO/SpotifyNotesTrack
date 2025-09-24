@@ -81,7 +81,7 @@ def add_or_update_note(request):
 
 
 @require_http_methods(["POST"])
-def remove_note(request):
+def remove_note(request, track_id):
     user_id = request.session.get("playlist:spotify_user_id")
     if not user_id:
         return redirect("playlist:spotify_login")
