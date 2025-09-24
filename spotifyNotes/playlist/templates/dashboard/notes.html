@@ -4,12 +4,13 @@
 {% block content %}
 <h2>Notes for Track: {{ track_id }}</h2>
 
-<form method="post" action="{% url 'playlist:add_or_update_note' %}">
+<form method="post" action="{% url 'playlist:add_or_update_note' track_id=track_id %}">
     {% csrf_token %}
     <input type="hidden" name="track_id" value="{{ track_id }}">
     <textarea name="note_text" rows="4" placeholder="Add your note...">{% if note_text %}{{ note_text }}{% endif %}</textarea>
     <button type="submit">Save Note</button>
 </form>
+
 
 <form method="post" action="{% url 'playlist:remove_note' %}">
     {% csrf_token %}

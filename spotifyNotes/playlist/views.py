@@ -1,52 +1,58 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from .db.db_queries import select_notes,delete_notes,upsert_notes
-from .services.analytics import analyze_notes_sentiment,plot_sentiment_distribution
+from .db.db_queries import select_notes, delete_notes, upsert_notes
+from .services.analytics import analyze_notes_sentiment, plot_sentiment_distribution
 from .services.spotify import SpotifyService
 # Create your views here.
+
 
 def track_notes_analysis(request, trackId):
     userId = request.session.get("spotify_user_id")
     if not userId:
         return redirect("playlist:spotify_login")
-    #fetch data from db
+    # fetch data from db
     notes = select_notes(trackId)
-    
+
     sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
     chart_html = plot_sentiment_distribution(sentiment_counts)
-    
-    return render(request, "playlist:dashboard/track_notes_analysis.html",{
+
+    return render(request, "playlist:dashboard/track_notes_analysis.html", {
         "chart_html": chart_html,
         "analyzed_notes": analyzed_notes,
         "track_id": trackId
     })
-    
+
+
 def spotify_login(request):
-    loginUrl=SpotifyService.get_login_url()
+    loginUrl = SpotifyService.get_login_url()
     return redirect(loginUrl)
 
+
 def spotify_callback(request):
-    code=request.GET.get("code")
+    code = request.GET.get("code")
     if not code:
         return redirect("playlist:spoify_login")
-    
-    service=SpotifyService(request.session)
+
+    service = SpotifyService(request.session)
     service.exchange_code_for_token(code)
-    
-    profile=service.get_user_profile()
+
+    profile = service.get_user_profile()
     request.session["spotify_user_id"] = profile.get("id")
     return redirect("playlist:dashboard")
 
+
 def dashboard(request):
-    service=SpotifyService(request.session)
-    tracks=service.get_top_tracks()
-    playlists=service.get_user_playlists()
-    return render(request,"dashboard/index.html",{"tracks": tracks,"playlist": playlists })
+    service = SpotifyService(request.session)
+    tracks = service.get_top_tracks()
+    playlists = service.get_user_playlists()
+    return render(request, "dashboard/index.html", {"tracks": tracks, "playlist": playlists})
+
 
 def notes_view(request, track_id):
     user_id = request.session.get("spotify_user_id")
     if not user_id:
-        return redirect("playlist:spotify_login")  # redirect if user not logged in
+        # redirect if user not logged in
+        return redirect("playlist:spotify_login")
 
     # Fetch notes for this user and track
     notes = select_notes(track_id)
@@ -68,9 +74,10 @@ def add_or_update_note(request):
     note_text = request.POST.get("note_text")
 
     if track_id and note_text is not None:
-        upsert_notes(user_id, track_id, note_text)  # upsert handles insert or update
+        # upsert handles insert or update
+        upsert_notes(user_id, track_id, note_text)
 
-    return redirect("track_notes", track_id=track_id)
+    return redirect("playlist:track_notes", track_id=track_id)
 
 
 @require_http_methods(["POST"])
