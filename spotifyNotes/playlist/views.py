@@ -23,7 +23,7 @@ def track_notes_analysis(request, track_id):
             "track_id": track_id
         })
 
-    except Exception:
+    except Exception as e:
         return render(request, "dashboard/track_notes_analysis.html", {
             "message": f"An error occurred: {str(e)}",
             "track_id": track_id,
