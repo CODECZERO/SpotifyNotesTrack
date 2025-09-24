@@ -34,8 +34,8 @@ def select_notes(trackId: str):
     return run_query("select_notes_by_music", prams=(trackId,), fetchall=True)
 
 
-def update_notes(userId: str, trackId: str):
-    return run_query("update_notes", prams=(userId, trackId,))
+def update_notes(userId: str, trackId: str,notesText: str):
+    return run_query("update_notes", prams=(userId, trackId, notesText))
 
 def delete_notes(userId: str, trackId: str):
     return run_query("", prams=(userId, trackId,))
@@ -46,6 +46,6 @@ def upsert_notes(userId: str, trackId: str, notesText: str):
     userNotes=next((n for n in existing if n[1]==userId),None)
     
     if userNotes:
-        update_notes(userId, trackId)
+        update_notes(userId, trackId,notesText)
     else:
         insert_notes(userId, trackId, notesText)
