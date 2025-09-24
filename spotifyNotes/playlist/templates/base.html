@@ -12,7 +12,7 @@
       <h1>Spotify Notes Dashboard</h1>
       <nav>
         <a href="{% url 'playlist:dashboard' %}">Dashboard</a>
-        {% if request.session.spotify_user_id %}
+        {% if request.session.spotify_username %}
         <span>Welcome, {{ request.session.spotify_username }}</span>
         {% else %}
         <a href="{% url 'playlist:spotify_login' %}">
