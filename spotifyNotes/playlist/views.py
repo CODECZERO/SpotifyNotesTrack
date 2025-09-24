@@ -6,12 +6,12 @@ from .services.spotify import SpotifyService
 # Create your views here.
 
 
-def track_notes_analysis(request, trackId):
+def track_notes_analysis(request, track_id):
     userId = request.session.get("spotify_user_id")
     if not userId:
         return redirect("playlist:spotify_login")
     # fetch data from db
-    notes = select_notes(trackId)
+    notes = select_notes(trackId=track_id)
 
     sentiment_counts, analyzed_notes = analyze_notes_sentiment(notes)
     chart_html = plot_sentiment_distribution(sentiment_counts)
@@ -19,7 +19,7 @@ def track_notes_analysis(request, trackId):
     return render(request, "playlist:dashboard/track_notes_analysis.html", {
         "chart_html": chart_html,
         "analyzed_notes": analyzed_notes,
-        "track_id": trackId
+        "track_id": track_id
     })
 
 
