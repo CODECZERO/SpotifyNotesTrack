@@ -28,7 +28,7 @@ SPOTIFY_REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["spotifynotestrack.onrender.com"]
+ALLOWED_HOSTS = ["127.0.0.1","spotifynotestrack.onrender.com"]
 
 
 
