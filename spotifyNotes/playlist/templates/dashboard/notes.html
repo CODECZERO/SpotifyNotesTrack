@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+<h2>Notes for Track: {{ track_id }}</h2>
+
+<form method="post" action="{% url 'add_or_update_note' %}">
+    {% csrf_token %}
+    <input type="hidden" name="track_id" value="{{ track_id }}">
+    <textarea name="note_text" rows="4" placeholder="Add your note...">{% if note_text %}{{ note_text }}{% endif %}</textarea>
+    <button type="submit">Save Note</button>
+</form>
+
+<form method="post" action="{% url 'remove_note' %}">
+    {% csrf_token %}
+    <input type="hidden" name="track_id" value="{{ track_id }}">
+    <button type="submit">Delete Note</button>
+</form>
+
+<h3>Existing Notes</h3>
+<ul>
+    {% for note in notes %}
+        <li>{{ note.3 }} — added on {{ note.4 }}</li>
+    {% empty %}
+        <li>No notes yet.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

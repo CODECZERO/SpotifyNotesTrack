@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome to Your Spotify Dashboard</h1>
+
+{% if tracks %}
+    <div class="tracks-list">
+        {% for track in tracks %}
+            <div class="track-item">
+                <p><strong>{{ track.name }}</strong> by {{ track.artists.0.name }}</p>
+                <a href="{% url 'track_notes' track.id %}">View Notes</a> |
+                <a href="{% url 'track_notes_analysis' track.id %}">Analyze Sentiment</a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No tracks found. Login with Spotify to fetch your top tracks.</p>
+{% endif %}
+
+{% endblock %}

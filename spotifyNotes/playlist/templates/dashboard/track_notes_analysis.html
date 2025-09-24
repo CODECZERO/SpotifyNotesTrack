@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Sentiment Analysis{% endblock %}
+
+{% block content %}
+<h2>Sentiment Analysis for Track: {{ track_id }}</h2>
+
+<div id="sentiment-chart">
+    {{ chart_html|safe }}
+</div>
+
+<h3>All Notes with Sentiment</h3>
+<ul>
+    {% for note in analyzed_notes %}
+        <li>{{ note.notesText }} — <strong>{{ note.sentiment }}</strong></li>
+    {% empty %}
+        <li>No notes yet.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
