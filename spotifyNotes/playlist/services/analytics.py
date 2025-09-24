@@ -9,7 +9,7 @@ def analyze_notes_sentiment(notes):
     analyze_notes = []
     
     for n in notes:
-        notes_text=n[3]
+        notes_text = n[0] if len(n) > 0 else ""
         analysis = TextBlob(notes_text)
         polarity = analysis.sentiment.polarity
     
