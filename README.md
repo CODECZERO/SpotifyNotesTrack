@@ -121,5 +121,5 @@ spotifyNotes/
 
 ### **Submission**
 
-* GitHub repo: [`<your-repo-link>`](https://github.com/CODECZERO/SpotifyNotesTrack)
-* Live deployment: [`<live-link>`](https://spotifynotestrack.onrender.com)
+* GitHub repo: [`SpotifyNotesTrack`](https://github.com/CODECZERO/SpotifyNotesTrack)
+* Live deployment: [`live-link`](https://spotifynotestrack.onrender.com)
