@@ -85,7 +85,7 @@ spotifyNotes/
 1. Clone the repository:
 
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/CODECZERO/SpotifyNotesTrack
    cd spotifyNotes
    ```
 2. Create a virtual environment and install dependencies:
