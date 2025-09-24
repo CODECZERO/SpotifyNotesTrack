@@ -90,4 +90,4 @@ def remove_note(request):
     if track_id:
         delete_notes(user_id, track_id)
 
-    return redirect("track_notes", track_id=track_id)
+    return redirect("playlist:track_notes", track_id=track_id)

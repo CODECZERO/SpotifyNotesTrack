@@ -11,4 +11,6 @@ urlpatterns = [
          views.track_notes_analysis, name='track_notes_analysis'),
     path('track/<str:track_id>/note/',
          views.add_or_update_note, name='add_or_update_note'),
+    path('track/<str:track_id>/note/',
+         views.remove_note, name='remove_note'),
 ]
