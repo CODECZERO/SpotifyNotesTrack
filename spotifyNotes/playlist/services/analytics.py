@@ -9,7 +9,6 @@ def analyze_notes_sentiment(notes):
     analyze_notes = []
     
     for n in notes:
-        print(n)
         notes_text = n[0] if len(n) > 0 else ""
         analysis = TextBlob(notes_text)
         polarity = analysis.sentiment.polarity
@@ -36,8 +35,7 @@ def analyze_notes_sentiment(notes):
 def plot_sentiment_distribution(sentiment_counts):
     df = pd.DataFrame(list(sentiment_counts.items()), 
                       columns=["Sentiment", "Count"])
-    
-    print(df)
+
     
     fig = px.pie(
         df, 
