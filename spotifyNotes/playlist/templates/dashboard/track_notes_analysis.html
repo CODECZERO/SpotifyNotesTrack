@@ -69,7 +69,7 @@
             {% for note in notes %}
             <li class="note-item">
                 <div class="note-text">
-                    <li>{{ note.notesText }}</li>
+                    <li>{{ note.0 }}</li>
                 </div>
                 <div class="note-meta">
                     <form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}" style="display:inline;">
