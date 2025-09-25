@@ -17,4 +17,19 @@
     {% endfor %}
 </ul>
 
+<h3>Your Notes</h3>
+<ul>
+    {% for note in notes %}
+        <li>{{ note.3 }} <!-- notesText column -->
+            <form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="track_id" value="{{ track_id }}">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>No notes yet.</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

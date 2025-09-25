@@ -18,6 +18,7 @@ def track_notes_analysis(request, track_id):
         chart_html = plot_sentiment_distribution(sentiment_counts)
 
         return render(request, "dashboard/track_notes_analysis.html", {
+            "notes": notes,
             "chart_html": chart_html,
             "analyzed_notes": analyzed_notes,
             "track_id": track_id
