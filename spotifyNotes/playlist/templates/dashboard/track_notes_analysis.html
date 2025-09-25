@@ -1,35 +1,93 @@
 {% extends "base.html" %}
 {% block title %}Sentiment Analysis{% endblock %}
 
+{% block head %}
+<style>
+    /* Reuse your Notes page styles */
+    {{ block.super }}
+</style>
+{% endblock %}
+
 {% block content %}
-<h2>Sentiment Analysis for Track: {{ track_id }}</h2>
+<div class="notes-container">
+    <!-- Back Button -->
+    <a href="{% url 'playlist:dashboard' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+    </a>
 
-<div id="sentiment-chart">
-    {{ chart_html|safe }}
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2 class="page-title">Sentiment Analysis</h2>
+        <p class="page-subtitle">Track ID: {{ track_id }}</p>
+    </div>
+
+    <!-- Sentiment Chart -->
+    <div class="notes-list-container" style="margin-bottom: 2rem;">
+        <h3 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Sentiment Overview
+        </h3>
+        <div id="sentiment-chart">
+            {{ chart_html|safe }}
+        </div>
+    </div>
+
+    <!-- All Notes with Sentiment -->
+    <div class="notes-list-container">
+        <h3 class="section-title">
+            <i class="fas fa-comments"></i>
+            All Notes with Sentiment
+        </h3>
+        <ul class="notes-list">
+            {% for note in analyzed_notes %}
+            <li class="note-item">
+                <div class="note-text">{{ note.notesText }}</div>
+                <div class="note-meta">
+                    <span class="note-date">
+                        <i class="fas fa-brain"></i>
+                        Sentiment: <strong>{{ note.sentiment }}</strong>
+                    </span>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty-state">
+                <i class="fas fa-sticky-note"></i>
+                <p>No notes with sentiment yet.</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Your Notes -->
+    <div class="notes-list-container" style="margin-top: 2rem;">
+        <h3 class="section-title">
+            <i class="fas fa-user"></i>
+            Your Notes
+        </h3>
+        <ul class="notes-list">
+            {% for note in notes %}
+            <li class="note-item">
+                <div class="note-text">
+                    <li>{{ note.notesText }}</li>
+                </div>
+                <div class="note-meta">
+                    <form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="track_id" value="{{ track_id }}">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty-state">
+                <i class="fas fa-sticky-note"></i>
+                <p>You haven’t added any notes yet.</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
-
-<h3>All Notes with Sentiment</h3>
-<ul>
-    {% for note in analyzed_notes %}
-        <li>{{ note.notesText }} — <strong>{{ note.sentiment }}</strong></li>
-    {% empty %}
-        <li>No notes yet.</li>
-    {% endfor %}
-</ul>
-
-<h3>Your Notes</h3>
-<ul>
-    {% for note in notes %}
-        <li>{{ note.3 }} <!-- notesText column -->
-            <form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="track_id" value="{{ track_id }}">
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-    {% empty %}
-        <li>No notes yet.</li>
-    {% endfor %}
-</ul>
-
 {% endblock %}
