@@ -1,30 +1,596 @@
 {% extends "base.html" %}
+
 {% block title %}Notes{% endblock %}
 
+{% block head %}
+<style>
+    /* Notes Page Specific Styles */
+    .notes-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem 0;
+    }
+
+    .page-title {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #ffffff, #1db954);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        color: #b3b3b3;
+        font-weight: 400;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: #b3b3b3;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+
+    .back-button:hover {
+        background: rgba(29, 185, 84, 0.1);
+        color: #1db954;
+        transform: translateY(-2px);
+    }
+
+    /* Note Form Styling */
+    .note-form-container {
+        background: rgba(40, 40, 40, 0.8);
+        backdrop-filter: blur(15px);
+        border: 1px solid #333333;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .note-form-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #1db954, #1ed760);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .note-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid #333333;
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        font-family: inherit;
+        line-height: 1.6;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .note-textarea:focus {
+        outline: none;
+        border-color: #1db954;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(29, 185, 84, 0.2);
+    }
+
+    .note-textarea::placeholder {
+        color: #666666;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: #1db954;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1ed760;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+    }
+
+    .btn-danger {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+        border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-danger:hover {
+        background: #e74c3c;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    }
+
+    /* Notes List Styling */
+    .notes-list-container {
+        background: rgba(40, 40, 40, 0.8);
+        backdrop-filter: blur(15px);
+        border: 1px solid #333333;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .notes-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .note-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .note-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(29, 185, 84, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .note-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .note-text {
+        color: #ffffff;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+        word-wrap: break-word;
+    }
+
+    .note-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #b3b3b3;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .note-date {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #666666;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #555555;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    /* Character Counter */
+    .character-counter {
+        text-align: right;
+        font-size: 0.8rem;
+        color: #666666;
+        margin-top: 0.5rem;
+    }
+
+    .character-counter.warning {
+        color: #f39c12;
+    }
+
+    .character-counter.danger {
+        color: #e74c3c;
+    }
+
+    /* Auto-save indicator */
+    .auto-save-indicator {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(29, 185, 84, 0.1);
+        color: #1db954;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .auto-save-indicator.show {
+        opacity: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .notes-container {
+            padding: 0;
+        }
+
+        .note-form-container,
+        .notes-list-container {
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .page-header {
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .note-form-container,
+        .notes-list-container {
+            padding: 1.25rem;
+            margin: 0 0.5rem 1.5rem;
+        }
+
+        .note-item {
+            padding: 1.25rem;
+        }
+    }
+
+    /* Animation for new notes */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .note-item {
+        animation: slideInUp 0.3s ease-out;
+    }
+
+    /* Loading states */
+    .btn.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .btn.loading::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 0.5rem;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h2>Notes for Track: {{ track_id }}</h2>
+<div class="notes-container">
+    <!-- Back Button -->
+    <a href="{% url 'playlist:dashboard' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+    </a>
 
-<form method="post" action="{% url 'playlist:add_or_update_note' track_id=track_id %}">
-    {% csrf_token %}
-    <input type="hidden" name="track_id" value="{{ track_id }}">
-    <textarea name="note_text" rows="4" placeholder="Add your note...">{% if note_text %}{{ note_text }}{% endif %}</textarea>
-    <button type="submit">Save Note</button>
-</form>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2 class="page-title">Track Notes</h2>
+        <p class="page-subtitle">Track ID: {{ track_id }}</p>
+    </div>
 
+    <!-- Note Form -->
+    <div class="note-form-container">
+        <div class="auto-save-indicator" id="autoSaveIndicator">
+            <i class="fas fa-check"></i> Saved
+        </div>
+        
+        <form method="post" action="{% url 'playlist:add_or_update_note' track_id=track_id %}" id="noteForm">
+            {% csrf_token %}
+            <input type="hidden" name="track_id" value="{{ track_id }}">
+            
+            <div class="form-group">
+                <label for="note_text" class="form-label">
+                    <i class="fas fa-edit"></i>
+                    Your Note
+                </label>
+                <textarea 
+                    name="note_text" 
+                    id="note_text"
+                    class="note-textarea" 
+                    placeholder="Add your thoughts about this track... What do you love about it? How does it make you feel? Any memories associated with it?"
+                    maxlength="2000"
+                >{% if note_text %}{{ note_text }}{% endif %}</textarea>
+                <div class="character-counter" id="charCounter">
+                    <span id="charCount">{% if note_text %}{{ note_text|length }}{% else %}0{% endif %}</span>/2000 characters
+                </div>
+            </div>
 
-<form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}">
-    {% csrf_token %}
-    <input type="hidden" name="track_id" value="{{ track_id }}">
-    <button type="submit">Delete Note</button>
-</form>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    Save Note
+                </button>
+                
+                {% if note_text %}
+                <button type="button" class="btn btn-danger" id="deleteBtn" onclick="showDeleteConfirmation()">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete Note
+                </button>
+                {% endif %}
+            </div>
+        </form>
 
-<h3>Existing Notes</h3>
-<ul>
-    {% for note in notes %}
-        <li>{{ note.3 }} — added on {{ note.4 }}</li>
-    {% empty %}
-        <li>No notes yet.</li>
-    {% endfor %}
-</ul>
+        <!-- Hidden Delete Form -->
+        <form method="post" action="{% url 'playlist:remove_note' track_id=track_id %}" id="deleteForm" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="track_id" value="{{ track_id }}">
+        </form>
+    </div>
 
+    <!-- Existing Notes -->
+    <div class="notes-list-container">
+        <h3 class="section-title">
+            <i class="fas fa-history"></i>
+            Note History
+        </h3>
+        
+        <ul class="notes-list">
+            {% for note in notes %}
+            <li class="note-item">
+                <div class="note-text">{{ note.3 }}</div>
+                <div class="note-meta">
+                    <div class="note-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        Added on {{ note.4|date:"F d, Y at g:i A" }}
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty-state">
+                <i class="fas fa-sticky-note"></i>
+                <p>No notes yet. Add your first note above!</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal (Simple) -->
+<div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: #282828; padding: 2rem; border-radius: 16px; max-width: 400px; margin: 2rem; text-align: center;">
+        <h3 style="color: white; margin-bottom: 1rem;">Delete Note?</h3>
+        <p style="color: #b3b3b3; margin-bottom: 2rem;">This action cannot be undone.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button onclick="hideDeleteConfirmation()" class="btn" style="background: #555; color: white;">Cancel</button>
+            <button onclick="confirmDelete()" class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('note_text');
+    const charCount = document.getElementById('charCount');
+    const charCounter = document.getElementById('charCounter');
+    const saveBtn = document.getElementById('saveBtn');
+    const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+    const noteForm = document.getElementById('noteForm');
+    
+    let autoSaveTimeout;
+
+    // Character counter
+    if (textarea && charCount) {
+        textarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+            
+            // Change color based on character count
+            if (length > 1800) {
+                charCounter.className = 'character-counter danger';
+            } else if (length > 1500) {
+                charCounter.className = 'character-counter warning';
+            } else {
+                charCounter.className = 'character-counter';
+            }
+            
+            // Auto-save after 2 seconds of no typing
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(autoSave, 2000);
+        });
+    }
+
+    // Auto-save functionality
+    function autoSave() {
+        if (textarea.value.trim() === '') return;
+        
+        const formData = new FormData(noteForm);
+        
+        fetch(noteForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAutoSaveIndicator();
+            }
+        })
+        .catch(error => {
+            console.error('Auto-save failed:', error);
+        });
+    }
+
+    function showAutoSaveIndicator() {
+        autoSaveIndicator.classList.add('show');
+        setTimeout(() => {
+            autoSaveIndicator.classList.remove('show');
+        }, 2000);
+    }
+
+    // Form submission with loading state
+    if (noteForm) {
+        noteForm.addEventListener('submit', function(e) {
+            saveBtn.classList.add('loading');
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        });
+    }
+
+    // Focus on textarea when page loads
+    if (textarea) {
+        textarea.focus();
+        // Put cursor at end of text
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+});
+
+// Delete confirmation functions
+function showDeleteConfirmation() {
+    document.getElementById('deleteModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function hideDeleteConfirmation() {
+    document.getElementById('deleteModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function confirmDelete() {
+    const deleteBtn = document.getElementById('deleteBtn');
+    deleteBtn.classList.add('loading');
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+    
+    document.getElementById('deleteForm').submit();
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideDeleteConfirmation();
+    }
+});
+
+// Close modal when clicking outside
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideDeleteConfirmation();
+    }
+});
+</script>
 {% endblock %}

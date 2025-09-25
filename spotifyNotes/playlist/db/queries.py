@@ -8,7 +8,7 @@ QUERIES = {
             trackId VARCHAR(100) NOT NULL,
             notesText TEXT,
             createdAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updatedAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
+            updatedAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
         );
     """,
     
@@ -27,7 +27,7 @@ QUERIES = {
     """,
     
     "update_notes": """
-        UPDATE playlistNotesTrack SET notesText=%s, updateAT=NOW()
+        UPDATE playlistNotesTrack SET notesText=%s, updatedAT=NOW()
         WHERE userId=%s AND trackId=%s;
     """
 }
