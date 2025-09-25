@@ -35,7 +35,6 @@ def track_notes_analysis(request, track_id):
 
 
 def spotify_login(request):
-    request.session.pop("spotify_token")
     loginUrl = SpotifyService.get_login_url()
     return redirect(loginUrl)
 
