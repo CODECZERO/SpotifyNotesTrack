@@ -39,6 +39,8 @@ class SpotifyService:
         })
 
         data = response.json()
+        if "refresh_token" in data:
+            self.session["spotify_refersh_token"]=data.get("refresh_token")
         self.access_token = data.get("access_token")
         self.session["spotify_token"] = self.access_token
         return self.access_token
@@ -54,13 +56,38 @@ class SpotifyService:
             return response.json().get("items", [])
         return []
 
+    def refresh_tokenFn(self):
+        refresh_token = self.session.get("spotify_refersh_token")
+        if not refresh_token:
+            return None
+        
+        token_url = "https://accounts.spotify.com/api/token"
+        response = requests.post(token_url, data={
+            "grant_type": "refresh_token",
+            "refresh_token":refresh_token,
+            "client_id": SPOTIFY_CLIENT_ID,
+            "client_secret": SPOTIFY_CLIENT_SECRET
+        })
+        data=response.json()
+        self.access_token = data.get("access_token")
+        self.session["spotify_token"] = self.access_token
+        return self.access_token
+    
     def get_user_playlists(self, limit=20):
         if not self.access_token:
             return []
-
+        
         headers = {"Authorization": f"Bearer {self.access_token}"}
         url = f"https://api.spotify.com/v1/me/playlists?limit={limit}"
         response = requests.get(url, headers=headers)
+        if response.status_code==401:
+            new_token = refresh_tokenFn()
+            if not new_token:
+                return []
+            headers={"Authorization": f"Bearer {new_token}"}
+            
+            response=requests.get(url,headers=headers)
+            
         if response.status_code == 200:
             return response.json().get("items", [])
         return []
